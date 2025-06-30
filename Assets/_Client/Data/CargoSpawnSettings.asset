@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254e7a3c6e994262a74c9d08bb279fef, type: 3}
+  m_Name: CargoSpawnSettings
+  m_EditorClassIdentifier: 
+  spawnPosition: {x: 0, y: 16, z: 0}
+  targetPosition: {x: 0, y: 1.6, z: 0}
+  cargoPrefab: {fileID: -7652190791482173431, guid: f0d5ee2128f7e704cb94e85bb6e1208d, type: 3}

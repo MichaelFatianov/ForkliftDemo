@@ -35,8 +35,6 @@ public class GlobalLifetimeScope : LifetimeScope
         await UniTask.WaitUntil(() => Find<UILifetimeScope>());
 
         var uiScope = Find<UILifetimeScope>();
-    
-        
         var screenFader = uiScope.Container.Resolve<FadeScreen>();
 
         _ = screenFader.Fade(4f, FadeType.FadeOut);
@@ -44,9 +42,11 @@ public class GlobalLifetimeScope : LifetimeScope
 
     private void RegisterSettings(IContainerBuilder builder)
     {
+        
         foreach (var settingsFile in _settings)
         {
-            builder.RegisterInstance(settingsFile);
+            var type = settingsFile.GetType();
+            builder.RegisterInstance(settingsFile).As(type);
         }
     }
 

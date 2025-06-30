@@ -8,6 +8,6 @@ public class MainLifetimeScope : LifetimeScope
         builder.Register<ForkliftInputHandler>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.RegisterComponentInHierarchy<Forklift>();
         builder.RegisterComponentInHierarchy<PlayerView>();
-        builder.RegisterEntryPoint<EngineInput>();
+        builder.RegisterComponentInHierarchy<CargoSpawnZone>();
     }
 }
