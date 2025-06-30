@@ -1,13 +1,21 @@
 using UnityEngine;
 
-public class FuelSystem : MonoBehaviour
+public class FuelSystem
 {
-    public float Fuel { get; private set; } = 100f;
+    public float Fuel { get; private set; }
+    
     public bool IsEmpty => Fuel <= 0f;
-    private const float drainPerSecond = 5f;
+    
+    private readonly EngineData _engineData;
 
-    public void Update()
+    public FuelSystem(EngineData engineData)
     {
-        Fuel = Mathf.Max(0f, Fuel - drainPerSecond * Time.deltaTime);
+        _engineData = engineData;
+        Fuel = 100f;
+    }
+    public void UpdateFuelValue()
+    {
+        Fuel = Mathf.Max(0f, Fuel - _engineData.DrainPerSecond * Time.deltaTime);
+        // Debug.Log($"Fuel left: {Fuel}");
     }
 }
