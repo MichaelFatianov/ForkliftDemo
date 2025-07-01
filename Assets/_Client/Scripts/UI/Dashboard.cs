@@ -2,22 +2,25 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Dashboard : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private Slider _slider;
-    [SerializeField] private TextMeshProUGUI _fuelText;
-    [SerializeField] private TextMeshProUGUI _engineText;
-
-    public void SetFuelValue(float value)
+    public class Dashboard : MonoBehaviour
     {
-        var percentValue = (value * 100).ToString("F1");
-        _fuelText.text = $"Fuel: {percentValue}%";
-        _slider.value = value;
-    }
+        [SerializeField] private Slider _slider;
+        [SerializeField] private TextMeshProUGUI _fuelText;
+        [SerializeField] private TextMeshProUGUI _engineText;
 
-    public void SetEngineStatus(bool isRunning)
-    {
-        var engineStatus = isRunning ? "Running" : "Stopped";
-        _engineText.text = $"Engine: {engineStatus}";
+        public void SetFuelValue(float value)
+        {
+            var percentValue = (value * 100).ToString("F1");
+            _fuelText.text = $"Fuel: {percentValue}%";
+            _slider.value = value;
+        }
+
+        public void SetEngineStatus(bool isRunning)
+        {
+            var engineStatus = isRunning ? "Running" : "Stopped";
+            _engineText.text = $"Engine: {engineStatus}";
+        }
     }
 }

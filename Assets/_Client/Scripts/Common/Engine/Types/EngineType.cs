@@ -1,4 +1,4 @@
-namespace _Client.Scripts.Engine.Types.Enum
+namespace Common.Engine.Types
 {
     public enum EngineType
     {

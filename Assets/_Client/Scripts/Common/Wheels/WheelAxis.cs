@@ -1,5 +1,8 @@
-public enum WheelAxis
+namespace Common.Wheels
 {
-    FrontAxis,
-    RearAxis,
+    public enum WheelAxis
+    {
+        FrontAxis,
+        RearAxis
+    }
 }

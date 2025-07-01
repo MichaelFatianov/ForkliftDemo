@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace _Client.Scripts
+namespace Common.Cargo
 {
-    public class CargoZone:MonoBehaviour
+    public class CargoZone : MonoBehaviour
     {
         [SerializeField] protected Transform spawnPoint;
         [SerializeField] protected Transform targetPoint;

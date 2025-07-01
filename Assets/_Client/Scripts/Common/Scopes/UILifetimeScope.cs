@@ -1,10 +1,14 @@
+using UI;
 using VContainer;
 using VContainer.Unity;
 
-public class UILifetimeScope : LifetimeScope
+namespace Common.Scopes
 {
-    protected override void Configure(IContainerBuilder builder)
+    public class UILifetimeScope : LifetimeScope
     {
-        builder.RegisterComponentInHierarchy<FadeScreen>();
+        protected override void Configure(IContainerBuilder builder)
+        {
+            builder.RegisterComponentInHierarchy<FadeScreen>();
+        }
     }
 }

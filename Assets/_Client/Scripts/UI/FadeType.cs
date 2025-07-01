@@ -1,4 +1,4 @@
-namespace _Client.Scripts.UI
+namespace UI
 {
     public enum FadeType
     {

@@ -1,54 +1,56 @@
 using System;
-using _Client.Scripts;
 using DG.Tweening;
 using UnityEngine;
 using VContainer;
 
-public class CargoDeliveryZone : CargoZone
+namespace Common.Cargo
 {
-    [SerializeField] private TriggerBox _triggerBox;
-
-    private Action _onCargoDelivered;
-    
-    [Inject]
-    public void Initialize(CargoSpawnSettings cargoSpawnSettings)
+    public class CargoDeliveryZone : CargoZone
     {
-        _triggerBox.Initialize(OnCargoEnterTrigger, _ => { }, _ => { }, cargoSpawnSettings.CargoTag);
-    }
+        [SerializeField] private TriggerBox _triggerBox;
 
-    public void SetCallbacks(Action onCargoDelivered)
-    {
-        _onCargoDelivered = onCargoDelivered;
-    }
+        private Action _onCargoDelivered;
 
-    private void OnCargoEnterTrigger(Collider other)
-    {
-        var cargoObject = other.GetComponent<CargoObject>();
-        DeliveryAnimation(cargoObject);
-    }
+        [Inject]
+        public void Initialize(CargoSpawnSettings cargoSpawnSettings)
+        {
+            _triggerBox.Initialize(OnCargoEnterTrigger, _ => { }, _ => { }, cargoSpawnSettings.CargoTag);
+        }
 
-    private void DeliveryAnimation(CargoObject cargoObject)
-    {
-        cargoObject.ToggleRigidbody(false);
-        
-        var cargoTransform = cargoObject.transform;
-        var rotationTweenY = cargoTransform
-            .DORotate(new Vector3(0f, 360f, 0f), 1f, RotateMode.WorldAxisAdd)
-            .SetEase(Ease.Linear)
-            .SetLoops(-1);
-        var rotationTweenXZ = cargoTransform
-            .DORotate(new Vector3(360f, 0f, 360f), 1f, RotateMode.LocalAxisAdd)
-            .SetEase(Ease.Linear)
-            .SetLoops(-1);
+        public void SetCallbacks(Action onCargoDelivered)
+        {
+            _onCargoDelivered = onCargoDelivered;
+        }
 
-        cargoTransform.DOMove(spawnPoint.position, 5f)
-            .SetEase(Ease.InOutSine)
-            .OnComplete(() =>
-            {
-                rotationTweenY.Kill(); 
-                rotationTweenXZ.Kill();
-                Destroy(cargoObject.gameObject);
-                _onCargoDelivered();
-            });
+        private void OnCargoEnterTrigger(Collider other)
+        {
+            var cargoObject = other.GetComponent<CargoObject>();
+            DeliveryAnimation(cargoObject);
+        }
+
+        private void DeliveryAnimation(CargoObject cargoObject)
+        {
+            cargoObject.ToggleRigidbody(false);
+
+            var cargoTransform = cargoObject.transform;
+            var rotationTweenY = cargoTransform
+                .DORotate(new Vector3(0f, 360f, 0f), 1f, RotateMode.WorldAxisAdd)
+                .SetEase(Ease.Linear)
+                .SetLoops(-1);
+            var rotationTweenXZ = cargoTransform
+                .DORotate(new Vector3(360f, 0f, 360f), 1f, RotateMode.LocalAxisAdd)
+                .SetEase(Ease.Linear)
+                .SetLoops(-1);
+
+            cargoTransform.DOMove(spawnPoint.position, 5f)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    rotationTweenY.Kill();
+                    rotationTweenXZ.Kill();
+                    Destroy(cargoObject.gameObject);
+                    _onCargoDelivered();
+                });
+        }
     }
 }

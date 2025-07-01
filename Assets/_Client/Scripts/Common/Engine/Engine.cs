@@ -1,34 +1,37 @@
 using System;
 
-[Serializable]
-public class Engine
+namespace Common.Engine
 {
-    private EngineData _engineData;
-    private float _vehicleMass;
-    private float _baseAccelerationFactor;
-    
-    private bool _isRunning;
-    
-    public bool IsRunning => _isRunning;
-    public float PenaltyThreshold => _engineData.PenaltyThreshold;
-    
-    public Engine(EngineData engineData, float vehicleVehicleMass, float baseAccelerationFactor)
+    [Serializable]
+    public class Engine
     {
-        _engineData = engineData;
-        _vehicleMass = vehicleVehicleMass;
-        _baseAccelerationFactor = baseAccelerationFactor;
-    }
+        private float _baseAccelerationFactor;
+        private EngineData _engineData;
 
-    public void Toggle()
-    {
-        _isRunning = !_isRunning;
-    }
+        private float _vehicleMass;
 
-    public float GetForceValue()
-    {
-        var acceleration = _engineData.HorsePowers * _baseAccelerationFactor / (_vehicleMass / 500f);
+        public Engine(EngineData engineData, float vehicleVehicleMass, float baseAccelerationFactor)
+        {
+            _engineData = engineData;
+            _vehicleMass = vehicleVehicleMass;
+            _baseAccelerationFactor = baseAccelerationFactor;
+        }
 
-        var force = _vehicleMass * acceleration;
-        return force;
+        public bool IsRunning { get; private set; }
+
+        public float PenaltyThreshold => _engineData.PenaltyThreshold;
+
+        public void Toggle()
+        {
+            IsRunning = !IsRunning;
+        }
+
+        public float GetForceValue()
+        {
+            var acceleration = _engineData.HorsePowers * _baseAccelerationFactor / (_vehicleMass / 500f);
+
+            var force = _vehicleMass * acceleration;
+            return force;
+        }
     }
 }

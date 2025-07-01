@@ -1,6 +1,5 @@
-using _Client.Scripts;
-using _Client.Scripts.UI;
 using Cysharp.Threading.Tasks;
+using UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
@@ -8,58 +7,57 @@ using VContainer;
 using VContainer.Unity;
 using UniTask = Cysharp.Threading.Tasks.UniTask;
 
-public class GlobalLifetimeScope : LifetimeScope
+namespace Common.Scopes
 {
-    [SerializeField] private AssetReference[] _scenes;
-     
-    [SerializeField] private ScriptableObject[] _settings;
-    [SerializeField] private Database[] _databases;
-    
-    protected override void Configure(IContainerBuilder builder)
+    public class GlobalLifetimeScope : LifetimeScope
     {
-        RegisterClasses(builder);
-        RegisterDatabases(builder);
-        RegisterSettings(builder);
+        [SerializeField] private AssetReference[] _scenes;
 
-        _ = LoadScenes();        
-    }
+        [SerializeField] private ScriptableObject[] _settings;
+        [SerializeField] private Database[] _databases;
 
-    private async UniTaskVoid LoadScenes()
-    {
-        foreach (var sceneAssetReference in _scenes)
+        protected override void Configure(IContainerBuilder builder)
         {
-            var async = Addressables.LoadSceneAsync(sceneAssetReference.RuntimeKey, LoadSceneMode.Additive, activateOnLoad: true);
-            await async.Task;
+            RegisterClasses(builder);
+            RegisterDatabases(builder);
+            RegisterSettings(builder);
+            _ = LoadScenes();
         }
-        
-        await UniTask.WaitUntil(() => Find<UILifetimeScope>());
 
-        var uiScope = Find<UILifetimeScope>();
-        var screenFader = uiScope.Container.Resolve<FadeScreen>();
-
-        screenFader.Fade(5f, FadeType.FadeOut);
-    }
-
-    private void RegisterSettings(IContainerBuilder builder)
-    {
-        
-        foreach (var settingsFile in _settings)
+        private async UniTaskVoid LoadScenes()
         {
-            var type = settingsFile.GetType();
-            builder.RegisterInstance(settingsFile).As(type);
+            foreach (var sceneAssetReference in _scenes)
+            {
+                var async = Addressables.LoadSceneAsync(sceneAssetReference.RuntimeKey, LoadSceneMode.Additive, true);
+                await async.Task;
+            }
+            
+            await UniTask.WaitUntil(() => Find<UILifetimeScope>());
+            
+            var uiScope = Find<UILifetimeScope>();
+            var screenFader = uiScope.Container.Resolve<FadeScreen>();
+            
+            screenFader.Fade(5f, FadeType.FadeOut);
         }
-    }
 
-    private void RegisterDatabases(IContainerBuilder builder)
-    {
-        foreach (var database in _databases)
+        private void RegisterSettings(IContainerBuilder builder)
         {
-            builder.RegisterInstance(database).AsSelf();
+            foreach (var settingsFile in _settings)
+            {
+                var type = settingsFile.GetType();
+                builder.RegisterInstance(settingsFile).As(type);
+            }
         }
-    }
 
-    private void RegisterClasses(IContainerBuilder builder)
-    {
-        builder.RegisterInstance(new ForkliftInputActions()).AsSelf().AsImplementedInterfaces();
+        private void RegisterDatabases(IContainerBuilder builder)
+        {
+            foreach (var database in _databases) builder.RegisterInstance(database).AsSelf();
+        }
+
+        private void RegisterClasses(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(new ForkliftInputActions()).AsSelf().AsImplementedInterfaces();
+            builder.RegisterInstance(_scenes);
+        }
     }
 }

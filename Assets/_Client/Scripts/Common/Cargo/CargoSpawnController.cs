@@ -1,18 +1,18 @@
 using VContainer.Unity;
 
-namespace _Client.Scripts
+namespace Common.Cargo
 {
-    public class CargoSpawnController: IStartable
+    public class CargoSpawnController : IStartable
     {
-        private CargoSpawnZone _cargoSpawnZone;
-        private CargoDeliveryZone _cargoDeliveryZone;
-        
+        private readonly CargoDeliveryZone _cargoDeliveryZone;
+        private readonly CargoSpawnZone _cargoSpawnZone;
+
         public CargoSpawnController(CargoSpawnZone cargoSpawnZone, CargoDeliveryZone cargoDeliveryZone)
         {
             _cargoSpawnZone = cargoSpawnZone;
             _cargoDeliveryZone = cargoDeliveryZone;
         }
-        
+
         public void Start()
         {
             _cargoDeliveryZone.SetCallbacks(OnCargoDelivered);
@@ -21,7 +21,7 @@ namespace _Client.Scripts
 
         private void SpawnCargo()
         {
-            if(_cargoSpawnZone.IsEmpty)
+            if (_cargoSpawnZone.IsEmpty)
                 _cargoSpawnZone.SpawnCargo();
         }
 

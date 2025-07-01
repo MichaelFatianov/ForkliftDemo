@@ -45,6 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: GlobalLifetimeScope
+    TypeName: Common.Scopes.GlobalLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
