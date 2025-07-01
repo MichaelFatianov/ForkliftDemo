@@ -37,7 +37,7 @@ public class GlobalLifetimeScope : LifetimeScope
         var uiScope = Find<UILifetimeScope>();
         var screenFader = uiScope.Container.Resolve<FadeScreen>();
 
-        _ = screenFader.Fade(4f, FadeType.FadeOut);
+        screenFader.Fade(5f, FadeType.FadeOut);
     }
 
     private void RegisterSettings(IContainerBuilder builder)

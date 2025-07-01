@@ -2,20 +2,22 @@ using UnityEngine;
 
 public class FuelSystem
 {
-    public float Fuel { get; private set; }
-    
-    public bool IsEmpty => Fuel <= 0f;
+    private float _fuel;
+    private float _maxCapacity = 100f;
+    public float Fuel => _fuel;
+    public float MaxCapacity => _maxCapacity;
+    public float FuelLeft => _fuel / _maxCapacity;
+    public bool IsEmpty => _fuel <= 0f;
     
     private readonly EngineData _engineData;
 
     public FuelSystem(EngineData engineData)
     {
         _engineData = engineData;
-        Fuel = 100f;
+        _fuel = _maxCapacity;
     }
     public void UpdateFuelValue()
     {
-        Fuel = Mathf.Max(0f, Fuel - _engineData.DrainPerSecond * Time.deltaTime);
-        // Debug.Log($"Fuel left: {Fuel}");
+        _fuel = Mathf.Max(0f, _fuel - _engineData.DrainPerSecond * Time.deltaTime);
     }
 }

@@ -4,16 +4,29 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-public class CargoSpawnZone : MonoBehaviour
+public class CargoSpawnZone : CargoZone
 {
-    [Inject] private CargoSpawnSettings _cargoSpawnSettings; 
-    [Inject] private IObjectResolver _objectResolver;
+    [SerializeField] private TriggerBox _triggerBox;
+    private CargoSpawnSettings _cargoSpawnSettings; 
+    private IObjectResolver _objectResolver;
+    
+    private bool _isEmpty;
+    public bool IsEmpty => _isEmpty;
+
+    [Inject]
+    private void Initialize(CargoSpawnSettings cargoSpawnSettings, IObjectResolver objectResolver)
+    {
+        _cargoSpawnSettings = cargoSpawnSettings;
+        _objectResolver = objectResolver;
+        _isEmpty = true;
+        _triggerBox.Initialize(OnCargoEnterTrigger, OnCargoExitTrigger, _ => { }, cargoSpawnSettings.CargoTag);
+    }
 
     [ContextMenu("SpawnCargo")]
     public void SpawnCargo()
     {
         var cargoObject = _objectResolver.Instantiate(_cargoSpawnSettings.CargoPrefab,
-            _cargoSpawnSettings.SpawnPosition, Quaternion.identity);
+            spawnPoint.position, Quaternion.identity);
         
         cargoObject.ToggleRigidbody(false);
         var cargoTransform = cargoObject.transform;
@@ -23,14 +36,25 @@ public class CargoSpawnZone : MonoBehaviour
             .SetEase(Ease.Linear)
             .SetLoops(-1);
 
-        cargoTransform.DOMove(_cargoSpawnSettings.TargetPosition, 5f)
+        cargoTransform.DOMove(targetPoint.position, 5f)
             .SetEase(Ease.InOutQuad)
             .OnComplete(() =>
             {
                 rotationTween.Kill(); 
                 cargoTransform.rotation = Quaternion.identity;
                 cargoObject.ToggleRigidbody(true);
+                _isEmpty = false;
             });
+    }
+
+    void OnCargoEnterTrigger(Collider other)
+    {
+        _isEmpty = false;
+    }
+
+    void OnCargoExitTrigger(Collider other)
+    {
+        _isEmpty = true;
     }
 
 }

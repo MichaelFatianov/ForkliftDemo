@@ -1,4 +1,3 @@
-using _Client.Scripts.Engine.Types.Enum;
 using UnityEngine;
 using VContainer;
 
@@ -6,29 +5,31 @@ public class Forklift : MonoBehaviour
 {
     [SerializeField] private Rigidbody _rb;
 
+    [Header("Fork")]
     [SerializeField] private GameObject _fork;
-
     [SerializeField] private float _forkBottomPosition;
     [SerializeField] private float _forkTopPosition;
     
-    [SerializeField] private float _maxSteerAngle = 30f;
-    [SerializeField] private float _brakeAcceleration = 30000f;
-
-    [SerializeField] private EngineType _engineType;
+    [Header("Wheels")]
     [SerializeField] private Wheel[] _wheels;
-    [SerializeField] private Vector3 _centerOfMass;
     
+    private ForkliftSettings _forkliftSettings;
     private Engine _engine;
     private FuelSystem _fuelSystem;
     private ForkliftInputHandler _input;
+    private Dashboard _dashboard;
     
     [Inject]
-    public void Initialize(EngineDatabase engineDatabase, ForkliftInputHandler input)
+    public void Initialize(EngineDatabase engineDatabase, ForkliftInputHandler input, ForkliftSettings forkliftSettings, Dashboard dashboard)
     {
-        var engineData = engineDatabase.MappedEnginesData[_engineType.ToString()];
+        _forkliftSettings = forkliftSettings;
+        var engineData = engineDatabase.MappedEnginesData[forkliftSettings.EngineType.ToString()];
         _engine = new Engine(engineData, _rb.mass, 1f);
         _fuelSystem = new FuelSystem(engineData);
+        _dashboard = dashboard;
         _input = input;
+
+        UpdateDashboard();
     }
 
     void Update()
@@ -36,10 +37,12 @@ public class Forklift : MonoBehaviour
         if (_input.IsEngineRunning)
         {
             _engine.Toggle();
+            _dashboard.SetEngineStatus(_engine.IsRunning);
             _input.ClearFrameFlags();
         }
         
         if (_fuelSystem.IsEmpty || !_engine.IsRunning) return;
+        _dashboard.SetFuelValue(_fuelSystem.FuelLeft);
         _fuelSystem.UpdateFuelValue();
     }
     
@@ -47,7 +50,7 @@ public class Forklift : MonoBehaviour
     {
         if (!_engine.IsRunning || _fuelSystem.IsEmpty) return;
         
-        var speedMod = _fuelSystem.Fuel < 50f ? 0.5f : 1f;
+        var speedMod = _fuelSystem.FuelLeft < _engine.PenaltyThreshold ? 0.5f : 1f;
         var moveInput = _input.MoveInput;
         var acceleration = _engine.GetForceValue();
         
@@ -72,15 +75,9 @@ public class Forklift : MonoBehaviour
     {
         foreach (var wheel in _wheels)
         {
-            switch (wheel.WheelAxis)
-            {
-                case WheelAxis.FrontAxis:
-                    break;
-                case WheelAxis.RearAxis:
-                    var torque = input * acceleration * speedModifier * Time.fixedDeltaTime;
-                    wheel.WheelCollider.motorTorque = torque;
-                    break;
-            }
+            if (wheel.WheelAxis != WheelAxis.RearAxis) continue;
+            var torque = input * acceleration * speedModifier * Time.fixedDeltaTime;
+            wheel.WheelCollider.motorTorque = torque;
         }
     }
     
@@ -88,25 +85,24 @@ public class Forklift : MonoBehaviour
     {
         foreach (var wheel in _wheels)
         {
-            switch (wheel.WheelAxis)
-            {
-                case WheelAxis.FrontAxis:
-                    break;
-                case WheelAxis.RearAxis:
-                    var steerAngle = -input * _maxSteerAngle;
-                    wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, steerAngle, 0.5f);
-                    break;
-            }
+            if (wheel.WheelAxis != WheelAxis.RearAxis) continue;
+            var steerAngle = -input * _forkliftSettings.MaxSteerAngle;
+            wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, steerAngle, 0.5f);
         }
     }
 
     private void Brake(bool isBraking)
     {
-        Debug.Log($"Braking?: {isBraking} with force {_brakeAcceleration}");
-        var brakingForce = isBraking ? _brakeAcceleration * Time.fixedDeltaTime : 0f;
+        var brakingForce = isBraking ? _forkliftSettings.BrakeAcceleration * Time.fixedDeltaTime : 0f;
         foreach (var wheel in _wheels)
         {
             wheel.WheelCollider.brakeTorque = brakingForce;
         }
+    }
+    
+    private void UpdateDashboard()
+    {
+        _dashboard.SetEngineStatus(_engine.IsRunning);
+        _dashboard.SetFuelValue(_fuelSystem.FuelLeft);
     }
 }

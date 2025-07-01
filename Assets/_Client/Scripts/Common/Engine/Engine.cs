@@ -7,18 +7,21 @@ public class Engine
     private float _vehicleMass;
     private float _baseAccelerationFactor;
     
+    private bool _isRunning;
+    
+    public bool IsRunning => _isRunning;
+    public float PenaltyThreshold => _engineData.PenaltyThreshold;
+    
     public Engine(EngineData engineData, float vehicleVehicleMass, float baseAccelerationFactor)
     {
         _engineData = engineData;
         _vehicleMass = vehicleVehicleMass;
         _baseAccelerationFactor = baseAccelerationFactor;
     }
-    
-    public bool IsRunning { get; private set; }
 
     public void Toggle()
     {
-        IsRunning = !IsRunning;
+        _isRunning = !_isRunning;
     }
 
     public float GetForceValue()

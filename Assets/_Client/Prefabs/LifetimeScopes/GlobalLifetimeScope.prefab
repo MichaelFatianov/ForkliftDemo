@@ -61,5 +61,6 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   _settings:
   - {fileID: 11400000, guid: dc9e597548413c844950265a7149a312, type: 2}
+  - {fileID: 11400000, guid: ffab3e96f5140b541895eeb229a408a3, type: 2}
   _databases:
   - {fileID: 11400000, guid: ef7730f198d1cdc458741509718aa9b5, type: 2}

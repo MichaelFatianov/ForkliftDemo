@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SimpleEngine
   m_EditorClassIdentifier: 
   id: SimpleEngine
-  horsePowers: 100
+  horsePowers: 150
   drainPerSecond: 1
   penaltyThreshold: 0.5

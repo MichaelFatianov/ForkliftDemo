@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254e7a3c6e994262a74c9d08bb279fef, type: 3}
   m_Name: CargoSpawnSettings
   m_EditorClassIdentifier: 
-  spawnPosition: {x: 0, y: 16, z: 0}
-  targetPosition: {x: 0, y: 1.6, z: 0}
-  cargoPrefab: {fileID: -7652190791482173431, guid: f0d5ee2128f7e704cb94e85bb6e1208d, type: 3}
+  _spawnPosition: {x: 0, y: 16, z: 0}
+  _targetPosition: {x: 0, y: 1.6, z: 0}
+  _cargoPrefab: {fileID: -7652190791482173431, guid: f0d5ee2128f7e704cb94e85bb6e1208d, type: 3}
+  _cargoTag: Cargo
