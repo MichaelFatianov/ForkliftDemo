@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using VContainer;
 
@@ -21,7 +22,7 @@ namespace Common.View
             _currentY = Mathf.Clamp(_currentY, _playerViewSettings.MinX, _playerViewSettings.MaxX);
             _currentX = Mathf.Clamp(_currentX, _playerViewSettings.MinY, _playerViewSettings.MaxY);
 
-            cameraPivot.localRotation = Quaternion.Euler(_currentY, _currentX, 0f);
+            cameraPivot.localRotation = Quaternion.Lerp(cameraPivot.localRotation, Quaternion.Euler(_currentY, _currentX, 0f),0.75f );
         }
     }
 }

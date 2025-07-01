@@ -46,15 +46,6 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Interact"",
-                    ""type"": ""Button"",
-                    ""id"": ""852140f2-7766-474d-8707-702459ba45f3"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Toggle Engine"",
                     ""type"": ""Button"",
                     ""id"": ""0d0499c1-798b-445c-a615-4f9286dce243"",
@@ -85,6 +76,24 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Brake"",
                     ""type"": ""Button"",
                     ""id"": ""32844373-2d8c-4a0a-9321-cb61bf951528"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""cbe0c8fd-026e-40c4-8853-93cf5dadcc85"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""fca78d12-dd6f-48b8-b689-d1d854f58f3f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -259,28 +268,6 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1c04ea5f-b012-41d1-a6f7-02e963b52893"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b3f66d0b-7751-423f-908b-a11c5bd95930"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""d955ccf3-ab13-4401-817e-00261c69f8ee"",
                     ""path"": ""<Keyboard>/t"",
                     ""interactions"": """",
@@ -320,6 +307,28 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Brake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a3e14f3-e8d9-41bb-9035-908cd00623ee"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88afda36-4990-4926-8038-5cf5c6e6e107"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -909,11 +918,12 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
         m_Forklift = asset.FindActionMap("Forklift", throwIfNotFound: true);
         m_Forklift_Move = m_Forklift.FindAction("Move", throwIfNotFound: true);
         m_Forklift_Look = m_Forklift.FindAction("Look", throwIfNotFound: true);
-        m_Forklift_Interact = m_Forklift.FindAction("Interact", throwIfNotFound: true);
         m_Forklift_ToggleEngine = m_Forklift.FindAction("Toggle Engine", throwIfNotFound: true);
         m_Forklift_ForkUp = m_Forklift.FindAction("Fork Up", throwIfNotFound: true);
         m_Forklift_ForkDown = m_Forklift.FindAction("Fork Down", throwIfNotFound: true);
         m_Forklift_Brake = m_Forklift.FindAction("Brake", throwIfNotFound: true);
+        m_Forklift_Exit = m_Forklift.FindAction("Exit", throwIfNotFound: true);
+        m_Forklift_Restart = m_Forklift.FindAction("Restart", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -995,22 +1005,24 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
     private List<IForkliftActions> m_ForkliftActionsCallbackInterfaces = new List<IForkliftActions>();
     private readonly InputAction m_Forklift_Move;
     private readonly InputAction m_Forklift_Look;
-    private readonly InputAction m_Forklift_Interact;
     private readonly InputAction m_Forklift_ToggleEngine;
     private readonly InputAction m_Forklift_ForkUp;
     private readonly InputAction m_Forklift_ForkDown;
     private readonly InputAction m_Forklift_Brake;
+    private readonly InputAction m_Forklift_Exit;
+    private readonly InputAction m_Forklift_Restart;
     public struct ForkliftActions
     {
         private @ForkliftInputActions m_Wrapper;
         public ForkliftActions(@ForkliftInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Forklift_Move;
         public InputAction @Look => m_Wrapper.m_Forklift_Look;
-        public InputAction @Interact => m_Wrapper.m_Forklift_Interact;
         public InputAction @ToggleEngine => m_Wrapper.m_Forklift_ToggleEngine;
         public InputAction @ForkUp => m_Wrapper.m_Forklift_ForkUp;
         public InputAction @ForkDown => m_Wrapper.m_Forklift_ForkDown;
         public InputAction @Brake => m_Wrapper.m_Forklift_Brake;
+        public InputAction @Exit => m_Wrapper.m_Forklift_Exit;
+        public InputAction @Restart => m_Wrapper.m_Forklift_Restart;
         public InputActionMap Get() { return m_Wrapper.m_Forklift; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1026,9 +1038,6 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
-            @Interact.started += instance.OnInteract;
-            @Interact.performed += instance.OnInteract;
-            @Interact.canceled += instance.OnInteract;
             @ToggleEngine.started += instance.OnToggleEngine;
             @ToggleEngine.performed += instance.OnToggleEngine;
             @ToggleEngine.canceled += instance.OnToggleEngine;
@@ -1041,6 +1050,12 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
             @Brake.started += instance.OnBrake;
             @Brake.performed += instance.OnBrake;
             @Brake.canceled += instance.OnBrake;
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
+            @Restart.started += instance.OnRestart;
+            @Restart.performed += instance.OnRestart;
+            @Restart.canceled += instance.OnRestart;
         }
 
         private void UnregisterCallbacks(IForkliftActions instance)
@@ -1051,9 +1066,6 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
-            @Interact.started -= instance.OnInteract;
-            @Interact.performed -= instance.OnInteract;
-            @Interact.canceled -= instance.OnInteract;
             @ToggleEngine.started -= instance.OnToggleEngine;
             @ToggleEngine.performed -= instance.OnToggleEngine;
             @ToggleEngine.canceled -= instance.OnToggleEngine;
@@ -1066,6 +1078,12 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
             @Brake.started -= instance.OnBrake;
             @Brake.performed -= instance.OnBrake;
             @Brake.canceled -= instance.OnBrake;
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
+            @Restart.started -= instance.OnRestart;
+            @Restart.performed -= instance.OnRestart;
+            @Restart.canceled -= instance.OnRestart;
         }
 
         public void RemoveCallbacks(IForkliftActions instance)
@@ -1250,11 +1268,12 @@ public partial class @ForkliftInputActions: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnInteract(InputAction.CallbackContext context);
         void OnToggleEngine(InputAction.CallbackContext context);
         void OnForkUp(InputAction.CallbackContext context);
         void OnForkDown(InputAction.CallbackContext context);
         void OnBrake(InputAction.CallbackContext context);
+        void OnExit(InputAction.CallbackContext context);
+        void OnRestart(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

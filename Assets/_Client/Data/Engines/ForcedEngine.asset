@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ForcedEngine
   m_EditorClassIdentifier: 
   id: ForcedEngine
-  horsePowers: 250
-  drainPerSecond: 1.5
+  horsePowers: 300
+  drainPerSecond: 0.8
   penaltyThreshold: 0.55

@@ -56,6 +56,7 @@ namespace Common.Scopes
 
         private void RegisterClasses(IContainerBuilder builder)
         {
+            builder.Register<GlobalInputHandler>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.RegisterInstance(new ForkliftInputActions()).AsSelf().AsImplementedInterfaces();
             builder.RegisterInstance(_scenes);
         }

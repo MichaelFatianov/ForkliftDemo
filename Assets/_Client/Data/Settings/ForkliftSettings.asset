@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de3717bb57b4644a1196cf292517c71, type: 3}
   m_Name: ForkliftSettings
   m_EditorClassIdentifier: 
-  _maxSteerAngle: 60
+  _maxSteerAngle: 50
   _brakeAcceleration: 30000
   _engineType: 0

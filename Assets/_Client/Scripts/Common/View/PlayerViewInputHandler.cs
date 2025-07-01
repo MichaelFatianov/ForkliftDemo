@@ -11,16 +11,16 @@ namespace Common.View
 
         public Vector2 LookDelta { get; private set; }
 
-        public void Dispose()
-        {
-            _inputActions.Disable();
-        }
-
         public void Start()
         {
             _inputActions.Forklift.Look.performed += context => LookDelta = context.ReadValue<Vector2>();
             _inputActions.Forklift.Look.canceled += _ => LookDelta = Vector2.zero;
             _inputActions.Enable();
+        }
+        
+        public void Dispose()
+        {
+            _inputActions.Disable();
         }
     }
 }
