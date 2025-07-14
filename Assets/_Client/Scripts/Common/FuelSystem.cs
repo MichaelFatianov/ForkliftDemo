@@ -14,8 +14,7 @@ namespace Common
         }
 
         public float Fuel { get; private set; }
-
-        public float MaxCapacity { get; } = 100f;
+        public float MaxCapacity => 100f;
 
         public float FuelLeft => Fuel / MaxCapacity;
         public bool IsEmpty => Fuel <= 0f;

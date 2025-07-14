@@ -17,12 +17,12 @@ namespace Common.View
 
         private void LateUpdate()
         {
-            _currentX += _input.LookDelta.x * _playerViewSettings.Sensitivity;
-            _currentY -= _input.LookDelta.y * _playerViewSettings.Sensitivity;
+            _currentX += _input.LookDelta.x * _playerViewSettings.Sensitivity * Time.deltaTime;
+            _currentY -= _input.LookDelta.y * _playerViewSettings.Sensitivity * Time.deltaTime;
             _currentY = Mathf.Clamp(_currentY, _playerViewSettings.MinX, _playerViewSettings.MaxX);
             _currentX = Mathf.Clamp(_currentX, _playerViewSettings.MinY, _playerViewSettings.MaxY);
 
-            cameraPivot.localRotation = Quaternion.Lerp(cameraPivot.localRotation, Quaternion.Euler(_currentY, _currentX, 0f),0.75f );
+            cameraPivot.localRotation = Quaternion.Euler(_currentY, _currentX, 0f);
         }
     }
 }

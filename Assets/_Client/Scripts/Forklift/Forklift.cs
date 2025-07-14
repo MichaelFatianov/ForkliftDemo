@@ -1,6 +1,7 @@
 using Common;
 using Common.Engine;
 using Common.Wheels;
+using DG.Tweening;
 using UI;
 using UnityEngine;
 using VContainer;
@@ -10,19 +11,23 @@ namespace Forklift
     public class Forklift : MonoBehaviour
     {
         [SerializeField] private Rigidbody _rb;
-
+        
+        [SerializeField] private Transform _steeringWheel;
+        
         [Header("Fork")] [SerializeField] private GameObject _fork;
 
         [SerializeField] private float _forkBottomPosition;
         [SerializeField] private float _forkTopPosition;
 
         [Header("Wheels")] [SerializeField] private Wheel[] _wheels;
+        [SerializeField] private Transform[] _animatedWheels;
+        private float _steerAngle;
 
         private Dashboard _dashboard;
         private Engine _engine;
-
-        private ForkliftSettings _forkliftSettings;
         private FuelSystem _fuelSystem;
+        
+        private ForkliftSettings _forkliftSettings;
         private ForkliftInputHandler _input;
 
         private void Update()
@@ -42,15 +47,15 @@ namespace Forklift
         private void FixedUpdate()
         {
             if (!_engine.IsRunning || _fuelSystem.IsEmpty) return;
-
             var speedMod = _fuelSystem.FuelLeft < _engine.PenaltyThreshold ? 0.5f : 1f;
             var moveInput = _input.MoveInput;
-            var acceleration = _engine.GetForceValue();
-
+                
             Brake(_input.IsBraking);
             Steer(moveInput.x);
-
+            
+            var acceleration = _engine.GetForceValue();
             if (!_engine.IsRunning) return;
+            
             MoveFork();
             Move(moveInput.y, acceleration, speedMod);
         }
@@ -93,9 +98,11 @@ namespace Forklift
             foreach (var wheel in _wheels)
             {
                 if (wheel.WheelAxis != WheelAxis.RearAxis) continue;
-                var steerAngle = -input * _forkliftSettings.MaxSteerAngle;
-                wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, steerAngle, 0.5f);
+                _steerAngle = -input * _forkliftSettings.MaxSteerAngle;
+                wheel.WheelCollider.steerAngle = Mathf.Lerp(wheel.WheelCollider.steerAngle, _steerAngle, 0.5f);
             }
+
+            AnimateWheels();
         }
 
         private void Brake(bool isBraking)
@@ -108,6 +115,20 @@ namespace Forklift
         {
             _dashboard.SetEngineStatus(_engine.IsRunning);
             _dashboard.SetFuelValue(_fuelSystem.FuelLeft);
+        }
+
+        private void AnimateWheels()
+        {
+            _steeringWheel.DOKill();   
+            foreach (var animatedWheel in _animatedWheels)
+            {
+                animatedWheel.DOKill();
+                animatedWheel.DOLocalRotate(new Vector3(0f, _steerAngle, 0f),0.2f);
+            }
+
+            var eulerAngles = _steeringWheel.localRotation.eulerAngles;
+            var steerVector = new Vector3(eulerAngles.x, eulerAngles.y, eulerAngles.y - _steerAngle);
+            _steeringWheel.DOLocalRotate(steerVector, 0.2f);
         }
     }
 }

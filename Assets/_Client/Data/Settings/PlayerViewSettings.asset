@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c142d43c73f242c284f47e6c09f6a07b, type: 3}
   m_Name: PlayerViewSettings
   m_EditorClassIdentifier: 
-  _sensitivity: 0.2
+  _sensitivity: 25
   _minY: -90
   _maxY: 90
   _minX: -30

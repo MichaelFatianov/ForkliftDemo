@@ -8,12 +8,13 @@ namespace Common.View
         [SerializeField] private float _sensitivity = 2f;
         
         [Header ("Horizontal View")]
-        [SerializeField] private float _minY = -60f;
-        [SerializeField] private float _maxY = 240f;
+        [SerializeField] private float _minY;
+        [SerializeField] private float _maxY;
 
         [Header ("Vertical View")]
-        [SerializeField] private float _minX = -30f;
-        [SerializeField] private float _maxX = 60f;
+        [SerializeField] private float _minX;
+
+        [SerializeField] private float _maxX;
         
         public float Sensitivity => _sensitivity;
         public float MinX => _minX;
